@@ -9,6 +9,8 @@ const ResetPassword = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
 
+  const serverUrl = process.env.REACT_APP_SERVER_URL || 'http://localhost:5000';
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -19,7 +21,7 @@ const ResetPassword = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/resetPassword', {
+      const response = await axios.post(`${serverUrl}/resetPassword`, {
         email,
         securityAnswer,
         newPassword

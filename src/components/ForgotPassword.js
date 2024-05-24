@@ -12,6 +12,8 @@ const ForgotPassword = () => {
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
 
+  const serverUrl = process.env.REACT_APP_SERVER_URL || 'http://localhost:5000';
+
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -22,7 +24,7 @@ const ForgotPassword = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/forgotPassword', { email });
+      const response = await axios.post(`${serverUrl}/forgotPassword`, { email });
       setSecurityQuestion(response.data.securityQuestion);
     } catch (error) {
       setError('Error initiating password reset: ' + error.message);
@@ -39,7 +41,7 @@ const ForgotPassword = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/resetPassword', {
+      const response = await axios.post(`${serverUrl}/resetPassword`, {
         email,
         securityAnswer,
         newPassword

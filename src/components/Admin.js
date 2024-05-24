@@ -14,6 +14,8 @@ const Admin = () => {
   const [currentTicket, setCurrentTicket] = useState(null);
   const [reply, setReply] = useState('');
 
+  const serverUrl = process.env.REACT_APP_SERVER_URL || 'http://localhost:5000';
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -60,7 +62,7 @@ const Admin = () => {
             newPassword = prompt('Enter the new password (at least 6 characters):');
           } while (newPassword.length < 6);
 
-          const response = await axios.post('http://localhost:5000/resetPassword', {
+          const response = await axios.post(`${serverUrl}/resetPassword`, {
             uid: userId,
             newPassword: newPassword,
           });
@@ -98,7 +100,7 @@ const Admin = () => {
 
   const handleReply = async () => {
     if (currentTicket && reply) {
-      const response = await axios.post(`http://localhost:5000/supportTicket/${currentTicket.id}/respond`, { reply });
+      const response = await axios.post(`${serverUrl}/supportTicket/${currentTicket.id}/respond`, { reply });
       if (response.status === 200) {
         const updatedTickets = supportTickets.map(ticket =>
           ticket.id === currentTicket.id ? { ...ticket, reply } : ticket
@@ -115,7 +117,7 @@ const Admin = () => {
 
   const handleDeleteTicket = async (ticketId) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/supportTicket/${ticketId}`);
+      const response = await axios.delete(`${serverUrl}/supportTicket/${ticketId}`);
       if (response.status === 200) {
         setSupportTickets(supportTickets.filter(ticket => ticket.id !== ticketId));
         alert('Support ticket deleted successfully');
@@ -240,11 +242,11 @@ const Admin = () => {
               <p><strong>Email:</strong> {currentTicket.email}</p>
               <p><strong>Subject:</strong> {currentTicket.subject}</p>
               <p><strong>Message:</strong> {currentTicket.message}</p>
-              {currentTicket.reply && (
-                <>
-                  <p><strong>Admin Reply:</strong> {currentTicket.reply}</p>
-                </>
-              )}
+              {currentTicket.replies && currentTicket.replies.map((reply, index) => (
+                <div key={index}>
+                  <strong>{reply.role} ({new Date(reply.timestamp).toLocaleString()}):</strong> {reply.reply}
+                </div>
+              ))}
               <Form.Group controlId="formReply">
                 <Form.Label>Reply</Form.Label>
                 <Form.Control
