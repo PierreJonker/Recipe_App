@@ -1,33 +1,32 @@
 import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 const ResetPassword = () => {
-  const [email, setEmail] = useState('');
-  const [securityAnswer, setSecurityAnswer] = useState('');
-  const [newPassword, setNewPassword] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
+  const [success, setSuccess] = useState(null);
+  const { token } = useParams();
 
-  const serverUrl = process.env.REACT_APP_SERVER_URL || 'http://localhost:5000';
+  const serverUrl = process.env.REACT_APP_SERVER_URL || '/api';
 
-  const handleSubmit = async (e) => {
+  const handleResetPassword = async (e) => {
     e.preventDefault();
     setError(null);
+    setSuccess(null);
 
-    if (!email || !securityAnswer || !newPassword) {
-      setError('All fields are required');
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters');
       return;
     }
 
     try {
-      const response = await axios.post(`${serverUrl}/resetPassword`, {
-        email,
-        securityAnswer,
-        newPassword
-      });
+      const response = await axios.post(`${serverUrl}/resetPassword`, { token, newPassword: password });
       if (response.status === 200) {
-        setSuccess(true);
+        setSuccess('Password reset successfully');
+      } else {
+        setError('Error resetting password');
       }
     } catch (error) {
       setError('Error resetting password: ' + error.message);
@@ -38,33 +37,15 @@ const ResetPassword = () => {
     <div>
       <h2>Reset Password</h2>
       {error && <Alert variant="danger">{error}</Alert>}
-      {success && <Alert variant="success">Password reset successfully</Alert>}
-      <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="formEmail">
-          <Form.Label>Email</Form.Label>
-          <Form.Control
-            type="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </Form.Group>
-        <Form.Group controlId="formSecurityAnswer">
-          <Form.Label>Security Answer</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter your security answer"
-            value={securityAnswer}
-            onChange={(e) => setSecurityAnswer(e.target.value)}
-          />
-        </Form.Group>
-        <Form.Group controlId="formNewPassword">
+      {success && <Alert variant="success">{success}</Alert>}
+      <Form onSubmit={handleResetPassword}>
+        <Form.Group controlId="formPassword">
           <Form.Label>New Password</Form.Label>
           <Form.Control
             type="password"
             placeholder="Enter new password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Group>
         <Button variant="primary" type="submit">Submit</Button>

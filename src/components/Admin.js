@@ -14,7 +14,7 @@ const Admin = () => {
   const [currentTicket, setCurrentTicket] = useState(null);
   const [reply, setReply] = useState('');
 
-  const serverUrl = process.env.REACT_APP_SERVER_URL || 'http://localhost:5000';
+  const serverUrl = process.env.REACT_APP_SERVER_URL || '/api';
 
   useEffect(() => {
     const fetchData = async () => {
@@ -100,10 +100,10 @@ const Admin = () => {
 
   const handleReply = async () => {
     if (currentTicket && reply) {
-      const response = await axios.post(`${serverUrl}/supportTicket/${currentTicket.id}/respond`, { reply });
+      const response = await axios.post(`${serverUrl}/supportTicket/${currentTicket.id}/respond`, { reply, isAdmin: true });
       if (response.status === 200) {
         const updatedTickets = supportTickets.map(ticket =>
-          ticket.id === currentTicket.id ? { ...ticket, reply } : ticket
+          ticket.id === currentTicket.id ? { ...ticket, replies: [...ticket.replies, { role: 'Admin', reply, timestamp: new Date().toISOString() }] } : ticket
         );
         setSupportTickets(updatedTickets);
         setReply('');
@@ -135,7 +135,7 @@ const Admin = () => {
     <div>
       <h2>Admin Dashboard</h2>
       {error && <Alert variant="danger">{error}</Alert>}
-      
+
       <h3>Manage Users</h3>
       <Table striped bordered hover>
         <thead>
@@ -150,13 +150,9 @@ const Admin = () => {
           {users.map(user => (
             <tr key={user.id}>
               <td>{user.username}</td>
-              <td>
-                <Button variant="link" onClick={() => handleViewUser(user.id)}>{user.email}</Button>
-              </td>
-              <td>{user.admin ? 'Yes' : 'No'}</td>
-              <td>
-                <Button variant="warning" onClick={() => handleResetPassword(user.id)}>Reset Password</Button>
-              </td>
+              <td><a href="#" onClick={() => handleViewUser(user.id)}>{user.email}</a></td>
+              <td>{user.isAdmin ? 'Yes' : 'No'}</td>
+              <td><Button onClick={() => handleResetPassword(user.id)}>Reset Password</Button></td>
             </tr>
           ))}
         </tbody>
@@ -178,9 +174,7 @@ const Admin = () => {
               <td>{recipe.title}</td>
               <td>{recipe.createdBy}</td>
               <td>{recipe.status}</td>
-              <td>
-                <Button variant="danger" onClick={() => handleDeleteRecipe(recipe.id)}>Delete</Button>
-              </td>
+              <td><Button variant="danger" onClick={() => handleDeleteRecipe(recipe.id)}>Delete</Button></td>
             </tr>
           ))}
         </tbody>
@@ -211,19 +205,18 @@ const Admin = () => {
         </tbody>
       </Table>
 
-      {/* User Modal */}
       <Modal show={showUserModal} onHide={() => setShowUserModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>User Information</Modal.Title>
+          <Modal.Title>User Details</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {currentUser && (
-            <>
-              <p><strong>Username:</strong> {currentUser.username}</p>
+            <div>
               <p><strong>Email:</strong> {currentUser.email}</p>
+              <p><strong>Username:</strong> {currentUser.username}</p>
               <p><strong>Security Question:</strong> {currentUser.securityQuestion}</p>
               <p><strong>Security Answer:</strong> {currentUser.securityAnswer}</p>
-            </>
+            </div>
           )}
         </Modal.Body>
         <Modal.Footer>
@@ -231,14 +224,13 @@ const Admin = () => {
         </Modal.Footer>
       </Modal>
 
-      {/* Support Ticket Modal */}
       <Modal show={showTicketModal} onHide={() => setShowTicketModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Support Ticket</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {currentTicket && (
-            <>
+            <div>
               <p><strong>Email:</strong> {currentTicket.email}</p>
               <p><strong>Subject:</strong> {currentTicket.subject}</p>
               <p><strong>Message:</strong> {currentTicket.message}</p>
@@ -257,7 +249,7 @@ const Admin = () => {
                   onChange={(e) => setReply(e.target.value)}
                 />
               </Form.Group>
-            </>
+            </div>
           )}
         </Modal.Body>
         <Modal.Footer>

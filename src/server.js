@@ -17,7 +17,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Endpoint to check security question
-app.post('/forgotPassword', async (req, res) => {
+app.post('/api/forgotPassword', async (req, res) => {
   const { email } = req.body;
   const firestore = admin.firestore();
 
@@ -41,7 +41,7 @@ app.post('/forgotPassword', async (req, res) => {
 });
 
 // Endpoint to reset password
-app.post('/resetPassword', async (req, res) => {
+app.post('/api/resetPassword', async (req, res) => {
   const { email, securityAnswer, newPassword } = req.body;
   const firestore = admin.firestore();
 
@@ -70,7 +70,7 @@ app.post('/resetPassword', async (req, res) => {
 });
 
 // Endpoint to create a support ticket
-app.post('/supportTicket', async (req, res) => {
+app.post('/api/supportTicket', async (req, res) => {
   const { email, subject, message, issueType } = req.body;
   const firestore = admin.firestore();
 
@@ -97,7 +97,7 @@ app.post('/supportTicket', async (req, res) => {
 });
 
 // Endpoint to get a support ticket by unique identifier
-app.get('/supportTicket/:id', async (req, res) => {
+app.get('/api/supportTicket/:id', async (req, res) => {
   const { id } = req.params;
   const firestore = admin.firestore();
 
@@ -115,7 +115,7 @@ app.get('/supportTicket/:id', async (req, res) => {
 });
 
 // Endpoint to respond to a support ticket
-app.post('/supportTicket/:id/respond', async (req, res) => {
+app.post('/api/supportTicket/:id/respond', async (req, res) => {
   const { id } = req.params;
   const { reply, isAdmin } = req.body; // isAdmin will indicate if the reply is from an admin
   const firestore = admin.firestore();
@@ -142,7 +142,7 @@ app.post('/supportTicket/:id/respond', async (req, res) => {
 });
 
 // Endpoint to delete a support ticket
-app.delete('/supportTicket/:id', async (req, res) => {
+app.delete('/api/supportTicket/:id', async (req, res) => {
   const { id } = req.params;
   const firestore = admin.firestore();
 
