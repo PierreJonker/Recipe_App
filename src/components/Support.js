@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Form, Button, Table, Alert, Modal } from 'react-bootstrap';
 import axios from 'axios';
@@ -14,7 +15,7 @@ const Support = () => {
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
-  const serverUrl = process.env.REACT_APP_SERVER_URL || 'http://localhost:5000';
+  const serverUrl = process.env.REACT_APP_SERVER_URL || 'http://localhost:5000/api';
 
   const handleCreateTicket = async (e) => {
     e.preventDefault();
