@@ -13,7 +13,7 @@ admin.initializeApp({
 });
 
 const app = express();
-app.use(cors({ origin: true })); // Enable CORS
+app.use(cors());
 app.use(bodyParser.json());
 
 // Endpoint to check security question
