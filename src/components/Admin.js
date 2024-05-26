@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Alert, Modal, Form } from 'react-bootstrap';
-import { getFirestore, collection, getDocs, deleteDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, deleteDoc, doc, getDoc } from 'firebase/firestore';
 import axios from 'axios';
 
 const Admin = () => {
@@ -150,7 +150,7 @@ const Admin = () => {
           {users.map(user => (
             <tr key={user.id}>
               <td>{user.username}</td>
-              <td><a href="#" onClick={() => handleViewUser(user.id)}>{user.email}</a></td>
+              <td><button onClick={() => handleViewUser(user.id)}>{user.email}</button></td>
               <td>{user.isAdmin ? 'Yes' : 'No'}</td>
               <td><Button onClick={() => handleResetPassword(user.id)}>Reset Password</Button></td>
             </tr>

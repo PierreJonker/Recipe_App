@@ -13,7 +13,14 @@ admin.initializeApp({
 });
 
 const app = express();
-app.use(cors());
+
+// Use CORS middleware
+app.use(cors({
+  origin: 'https://your-frontend-url.vercel.app', // Replace with your Vercel frontend URL
+  methods: 'GET,POST,PUT,DELETE,OPTIONS',
+  allowedHeaders: 'Content-Type, Authorization'
+}));
+
 app.use(bodyParser.json());
 
 // Endpoint to check security question
