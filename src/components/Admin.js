@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Alert, Modal, Form } from 'react-bootstrap';
-import { getFirestore, collection, getDocs, deleteDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, deleteDoc, doc, getDoc } from 'firebase/firestore';
 import axios from 'axios';
 
 const Admin = () => {
@@ -60,7 +60,7 @@ const Admin = () => {
             newPassword = prompt('Enter the new password (at least 6 characters):');
           } while (newPassword.length < 6);
 
-          const response = await axios.post('http://localhost:5000/resetPassword', {
+          const response = await axios.post(`${process.env.REACT_APP_API_URL}/resetPassword`, {
             uid: userId,
             newPassword: newPassword,
           });
@@ -98,7 +98,7 @@ const Admin = () => {
 
   const handleReply = async () => {
     if (currentTicket && reply) {
-      const response = await axios.post(`http://localhost:5000/supportTicket/${currentTicket.id}/respond`, { reply });
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/supportTicket/${currentTicket.id}/respond`, { reply });
       if (response.status === 200) {
         const updatedTickets = supportTickets.map(ticket =>
           ticket.id === currentTicket.id ? { ...ticket, reply } : ticket
@@ -115,7 +115,7 @@ const Admin = () => {
 
   const handleDeleteTicket = async (ticketId) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/supportTicket/${ticketId}`);
+      const response = await axios.delete(`${process.env.REACT_APP_API_URL}/supportTicket/${ticketId}`);
       if (response.status === 200) {
         setSupportTickets(supportTickets.filter(ticket => ticket.id !== ticketId));
         alert('Support ticket deleted successfully');
