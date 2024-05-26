@@ -17,12 +17,12 @@ const Support = () => {
   const handleCreateTicket = async (e) => {
     e.preventDefault();
     setError(null);
-
+  
     if (!email || !subject || !message || !issueType) {
       setError('All fields are required');
       return;
     }
-
+  
     try {
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/supportTicket`, {
         email,
