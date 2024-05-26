@@ -100,7 +100,6 @@ const SupportTicket = () => {
         </Form.Group>
         <Button variant="primary" type="submit">Submit</Button>
       </Form>
-
       <h3>Your Tickets</h3>
       <Table striped bordered hover>
         <thead>
@@ -124,7 +123,6 @@ const SupportTicket = () => {
           ))}
         </tbody>
       </Table>
-
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Support Ticket</Modal.Title>
@@ -134,7 +132,7 @@ const SupportTicket = () => {
             <>
               <p><strong>Subject:</strong> {currentTicket.subject}</p>
               <p><strong>Message:</strong> {currentTicket.message}</p>
-              <p><strong>Reply:</strong> {currentTicket.reply}</p>
+              {currentTicket.reply && <p><strong>Reply:</strong> {currentTicket.reply}</p>}
               <Form.Group controlId="formReply">
                 <Form.Label>Reply</Form.Label>
                 <Form.Control

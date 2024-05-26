@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Alert, Modal, Form } from 'react-bootstrap';
-import { getFirestore, collection, getDocs, deleteDoc, doc, getDoc } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, deleteDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
 import axios from 'axios';
 
 const Admin = () => {
@@ -13,8 +13,6 @@ const Admin = () => {
   const [showTicketModal, setShowTicketModal] = useState(false);
   const [currentTicket, setCurrentTicket] = useState(null);
   const [reply, setReply] = useState('');
-
-  const serverUrl = process.env.REACT_APP_SERVER_URL || '/api';
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,7 +60,7 @@ const Admin = () => {
             newPassword = prompt('Enter the new password (at least 6 characters):');
           } while (newPassword.length < 6);
 
-          const response = await axios.post(`${serverUrl}/resetPassword`, {
+          const response = await axios.post('http://localhost:5000/resetPassword', {
             uid: userId,
             newPassword: newPassword,
           });
@@ -100,10 +98,10 @@ const Admin = () => {
 
   const handleReply = async () => {
     if (currentTicket && reply) {
-      const response = await axios.post(`${serverUrl}/supportTicket/${currentTicket.id}/respond`, { reply, isAdmin: true });
+      const response = await axios.post(`http://localhost:5000/supportTicket/${currentTicket.id}/respond`, { reply });
       if (response.status === 200) {
         const updatedTickets = supportTickets.map(ticket =>
-          ticket.id === currentTicket.id ? { ...ticket, replies: [...ticket.replies, { role: 'Admin', reply, timestamp: new Date().toISOString() }] } : ticket
+          ticket.id === currentTicket.id ? { ...ticket, reply } : ticket
         );
         setSupportTickets(updatedTickets);
         setReply('');
@@ -117,7 +115,7 @@ const Admin = () => {
 
   const handleDeleteTicket = async (ticketId) => {
     try {
-      const response = await axios.delete(`${serverUrl}/supportTicket/${ticketId}`);
+      const response = await axios.delete(`http://localhost:5000/supportTicket/${ticketId}`);
       if (response.status === 200) {
         setSupportTickets(supportTickets.filter(ticket => ticket.id !== ticketId));
         alert('Support ticket deleted successfully');
@@ -135,7 +133,7 @@ const Admin = () => {
     <div>
       <h2>Admin Dashboard</h2>
       {error && <Alert variant="danger">{error}</Alert>}
-
+      
       <h3>Manage Users</h3>
       <Table striped bordered hover>
         <thead>
@@ -150,9 +148,13 @@ const Admin = () => {
           {users.map(user => (
             <tr key={user.id}>
               <td>{user.username}</td>
-              <td><button onClick={() => handleViewUser(user.id)}>{user.email}</button></td>
-              <td>{user.isAdmin ? 'Yes' : 'No'}</td>
-              <td><Button onClick={() => handleResetPassword(user.id)}>Reset Password</Button></td>
+              <td>
+                <Button variant="link" onClick={() => handleViewUser(user.id)}>{user.email}</Button>
+              </td>
+              <td>{user.admin ? 'Yes' : 'No'}</td>
+              <td>
+                <Button variant="warning" onClick={() => handleResetPassword(user.id)}>Reset Password</Button>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -174,7 +176,9 @@ const Admin = () => {
               <td>{recipe.title}</td>
               <td>{recipe.createdBy}</td>
               <td>{recipe.status}</td>
-              <td><Button variant="danger" onClick={() => handleDeleteRecipe(recipe.id)}>Delete</Button></td>
+              <td>
+                <Button variant="danger" onClick={() => handleDeleteRecipe(recipe.id)}>Delete</Button>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -205,18 +209,19 @@ const Admin = () => {
         </tbody>
       </Table>
 
+      {/* User Modal */}
       <Modal show={showUserModal} onHide={() => setShowUserModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>User Details</Modal.Title>
+          <Modal.Title>User Information</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {currentUser && (
-            <div>
-              <p><strong>Email:</strong> {currentUser.email}</p>
+            <>
               <p><strong>Username:</strong> {currentUser.username}</p>
+              <p><strong>Email:</strong> {currentUser.email}</p>
               <p><strong>Security Question:</strong> {currentUser.securityQuestion}</p>
               <p><strong>Security Answer:</strong> {currentUser.securityAnswer}</p>
-            </div>
+            </>
           )}
         </Modal.Body>
         <Modal.Footer>
@@ -224,21 +229,22 @@ const Admin = () => {
         </Modal.Footer>
       </Modal>
 
+      {/* Support Ticket Modal */}
       <Modal show={showTicketModal} onHide={() => setShowTicketModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Support Ticket</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {currentTicket && (
-            <div>
+            <>
               <p><strong>Email:</strong> {currentTicket.email}</p>
               <p><strong>Subject:</strong> {currentTicket.subject}</p>
               <p><strong>Message:</strong> {currentTicket.message}</p>
-              {currentTicket.replies && currentTicket.replies.map((reply, index) => (
-                <div key={index}>
-                  <strong>{reply.role} ({new Date(reply.timestamp).toLocaleString()}):</strong> {reply.reply}
-                </div>
-              ))}
+              {currentTicket.reply && (
+                <>
+                  <p><strong>Admin Reply:</strong> {currentTicket.reply}</p>
+                </>
+              )}
               <Form.Group controlId="formReply">
                 <Form.Label>Reply</Form.Label>
                 <Form.Control
@@ -249,7 +255,7 @@ const Admin = () => {
                   onChange={(e) => setReply(e.target.value)}
                 />
               </Form.Group>
-            </div>
+            </>
           )}
         </Modal.Body>
         <Modal.Footer>
