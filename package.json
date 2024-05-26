@@ -2,6 +2,7 @@
   "name": "recipe_sharing_app",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://PierreJonker.github.io/Recipe_App",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -26,6 +27,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "deploy": "gh-pages -d build",
+    "predeploy": "npm run build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -51,5 +54,8 @@
   "main": "setAdmin.js",
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "gh-pages": "^6.1.1"
+  }
 }
