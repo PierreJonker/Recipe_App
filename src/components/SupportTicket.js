@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Table, Alert, Modal } from 'react-bootstrap';
-import { getFirestore, collection, addDoc, getDocs, updateDoc, doc } from 'firebase/firestore';
+import axios from 'axios';
 import { getAuth } from 'firebase/auth';
 
 const SupportTicket = () => {
@@ -13,20 +13,22 @@ const SupportTicket = () => {
   const [reply, setReply] = useState('');
 
   const auth = getAuth();
-  const firestore = getFirestore();
+
+  const fetchTickets = async () => {
+    const user = auth.currentUser;
+    if (user) {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/supportTickets/${user.uid}`);
+        setTickets(response.data);
+      } catch (error) {
+        setError('Failed to fetch tickets: ' + error.message);
+      }
+    }
+  };
 
   useEffect(() => {
-    const fetchTickets = async () => {
-      const user = auth.currentUser;
-      if (user) {
-        const ticketsSnapshot = await getDocs(collection(firestore, `users/${user.uid}/supportTickets`));
-        const ticketsList = ticketsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setTickets(ticketsList);
-      }
-    };
-
     fetchTickets();
-  }, [auth, firestore]);
+  }, []);
 
   const handleCreateTicket = async (e) => {
     e.preventDefault();
@@ -44,11 +46,10 @@ const SupportTicket = () => {
     }
 
     try {
-      await addDoc(collection(firestore, `users/${user.uid}/supportTickets`), {
+      await axios.post(`${process.env.REACT_APP_API_URL}/supportTicket`, {
+        uid: user.uid,
         subject,
-        message,
-        createdAt: new Date().toISOString(),
-        reply: null
+        message
       });
       setSubject('');
       setMessage('');
@@ -65,7 +66,7 @@ const SupportTicket = () => {
 
   const handleReply = async () => {
     try {
-      await updateDoc(doc(firestore, `users/${auth.currentUser.uid}/supportTickets`, currentTicket.id), { reply });
+      await axios.post(`${process.env.REACT_APP_API_URL}/supportTicket/${currentTicket.id}/respond`, { reply });
       setReply('');
       setShowModal(false);
       fetchTickets();

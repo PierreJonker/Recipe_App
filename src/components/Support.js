@@ -24,7 +24,7 @@ const Support = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/supportTicket', {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/supportTicket`, {
         email,
         subject,
         message,
@@ -49,7 +49,7 @@ const Support = () => {
     }
 
     try {
-      const response = await axios.get(`http://localhost:5000/supportTicket/${ticketId}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/supportTicket/${ticketId}`);
       setTickets([response.data]);
     } catch (error) {
       setError('Error fetching support ticket: ' + error.message);
@@ -64,7 +64,7 @@ const Support = () => {
   const handleReply = async () => {
     try {
       const isAdmin = false; // Change this condition based on your logic to determine if the reply is from an admin
-      await axios.post(`http://localhost:5000/supportTicket/${currentTicket.uniqueIdentifier}/respond`, { reply, isAdmin });
+      await axios.post(`${process.env.REACT_APP_API_URL}/supportTicket/${currentTicket.uniqueIdentifier}/respond`, { reply, isAdmin });
       const updatedTickets = tickets.map(ticket =>
         ticket.uniqueIdentifier === currentTicket.uniqueIdentifier ? { ...ticket, replies: [...(ticket.replies || []), { reply, role: isAdmin ? 'Admin' : 'User', timestamp: new Date().toISOString() }] } : ticket
       );
