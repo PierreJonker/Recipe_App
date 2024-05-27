@@ -7,31 +7,38 @@ const { v4: uuidv4 } = require('uuid');
 
 // Initialize the app with a service account, granting admin privileges
 const serviceAccount = require('./serviceAccountKey.json');
-
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: 'https://recipesharingapp-1be92.firebaseio.com' // Update with your database URL
 });
 
 const app = express();
-app.use(cors({ origin: true }));
+
+// Allow CORS requests from your React app's origin
+app.use(cors({ origin: 'https://recipesharingapp-1be92.web.app/' }));
+
+// Add CORS headers
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
+
 app.use(bodyParser.json());
 
 // Define your API routes
 app.post('/forgotPassword', async (req, res) => {
   const { email } = req.body;
   const firestore = admin.firestore();
-
   if (!email) {
     return res.status(400).send('Email is required');
   }
-
   try {
     const userSnapshot = await firestore.collection('users').where('email', '==', email).get();
     if (userSnapshot.empty) {
       return res.status(404).send('User not found');
     }
-
     const userDoc = userSnapshot.docs[0];
     const securityQuestion = userDoc.data().securityQuestion;
     res.status(200).send({ securityQuestion });
@@ -42,27 +49,30 @@ app.post('/forgotPassword', async (req, res) => {
 });
 
 app.post('/resetPassword', async (req, res) => {
-  const { email, securityAnswer, newPassword } = req.body;
+  const { email, securityAnswer, newPassword, uid } = req.body;
   const firestore = admin.firestore();
-
   if (!email || !securityAnswer || !newPassword) {
     return res.status(400).send('All fields are required');
   }
-
   try {
-    const userSnapshot = await firestore.collection('users').where('email', '==', email).get();
-    if (userSnapshot.empty) {
-      return res.status(404).send('User not found');
+    if (uid) {
+      // Reset password for a specific user (admin functionality)
+      await admin.auth().updateUser(uid, { password: newPassword });
+      res.status(200).send('Password reset successfully');
+    } else {
+      // Reset password for the current user
+      const userSnapshot = await firestore.collection('users').where('email', '==', email).get();
+      if (userSnapshot.empty) {
+        return res.status(404).send('User not found');
+      }
+      const userDoc = userSnapshot.docs[0];
+      if (userDoc.data().securityAnswer !== securityAnswer) {
+        return res.status(400).send('Incorrect security answer');
+      }
+      const userId = userDoc.id;
+      await admin.auth().updateUser(userId, { password: newPassword });
+      res.status(200).send('Password reset successfully');
     }
-
-    const userDoc = userSnapshot.docs[0];
-    if (userDoc.data().securityAnswer !== securityAnswer) {
-      return res.status(400).send('Incorrect security answer');
-    }
-
-    const userId = userDoc.id;
-    await admin.auth().updateUser(userId, { password: newPassword });
-    res.status(200).send('Password reset successfully');
   } catch (error) {
     console.error('Error resetting password:', error);
     res.status(400).send('Error resetting password: ' + error.message);
@@ -72,11 +82,9 @@ app.post('/resetPassword', async (req, res) => {
 app.post('/supportTicket', async (req, res) => {
   const { email, subject, message, issueType } = req.body;
   const firestore = admin.firestore();
-
   if (!email || !subject || !message || !issueType) {
     return res.status(400).send('Invalid request: All fields are required');
   }
-
   try {
     const id = uuidv4();
     await firestore.collection('supportTickets').doc(id).set({
@@ -98,7 +106,6 @@ app.post('/supportTicket', async (req, res) => {
 app.get('/supportTicket/:id', async (req, res) => {
   const { id } = req.params;
   const firestore = admin.firestore();
-
   try {
     const doc = await firestore.collection('supportTickets').doc(id).get();
     if (doc.exists) {
@@ -116,11 +123,9 @@ app.post('/supportTicket/:id/respond', async (req, res) => {
   const { id } = req.params;
   const { reply, isAdmin } = req.body;
   const firestore = admin.firestore();
-
   if (!reply) {
     return res.status(400).send('Invalid request: Reply is required');
   }
-
   try {
     const ticketRef = firestore.collection('supportTickets').doc(id);
     const user = isAdmin ? await admin.auth().getUser(req.body.uid) : null;
@@ -141,7 +146,6 @@ app.post('/supportTicket/:id/respond', async (req, res) => {
 app.delete('/supportTicket/:id', async (req, res) => {
   const { id } = req.params;
   const firestore = admin.firestore();
-
   try {
     await firestore.collection('supportTickets').doc(id).delete();
     res.status(200).send('Support ticket deleted successfully');
@@ -151,7 +155,4 @@ app.delete('/supportTicket/:id', async (req, res) => {
   }
 });
 
-exports.api = functions.runWith({
-  memory: '1GB',
-  timeoutSeconds: 300
-}).https.onRequest(app);
+exports.api = functions.runWith({ memory: '1GB', timeoutSeconds: 300 }).https.onRequest(app);
