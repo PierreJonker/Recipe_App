@@ -3,9 +3,10 @@
 <head>
   <meta http-equiv="refresh" content="0; url=./Recipe_App" />
   <script>
+    // Redirect to the root URL with JavaScript if meta refresh doesn't work
     setTimeout(function() {
-      var pathname = window.location.pathname.replace('/Recipe_App', '');
-      var newPathname = '/Recipe_App' + pathname;
+      var pathname = window.location.pathname;
+      var newPathname = '/Recipe_App' + pathname.replace('/Recipe_App', '');
       window.location.replace(newPathname);
     }, 0);
   </script>
