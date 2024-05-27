@@ -1,4 +1,3 @@
-// src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
@@ -21,7 +20,7 @@ import './App.css';
 
 function App() {
   return (
-    <Router>
+    <Router basename="/Recipe_App">
       <Header />
       <Container className="flex-grow-1">
         <Routes>
