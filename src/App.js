@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Header from './components/Header';
 import RecipeList from './components/RecipeList';
 import RecipeForm from './components/RecipeForm';
@@ -37,6 +37,7 @@ function App() {
           <Route path="/private-recipes" element={<PrivateRoute><PrivateRecipes /></PrivateRoute>} />
           <Route path="/draft-recipes" element={<PrivateRoute><DraftRecipes /></PrivateRoute>} />
           <Route path="/admin" element={<PrivateRoute requiresAdmin={true}><Admin /></PrivateRoute>} />
+          <Route path="*" element={<Navigate to="/" />} /> {/* Fallback route to handle unknown paths */}
         </Routes>
       </Container>
       <Footer />

@@ -28,21 +28,26 @@ const PrivateRoute = ({ children, requiresAdmin = false }) => {
   }, [user]);
 
   if (loading || checkingAdmin) {
+    console.log('Loading or checking admin...');
     return <div>Loading...</div>;
   }
 
   if (error) {
+    console.log('Error:', error.message);
     return <div>Error: {error.message}</div>;
   }
 
   if (!user) {
+    console.log('No user, redirecting to login');
     return <Navigate to="/Recipe_App/login" />;
   }
 
   if (requiresAdmin && !isAdmin) {
+    console.log('User is not admin, redirecting to home');
     return <Navigate to="/Recipe_App/" />;
   }
 
+  console.log('User authenticated and authorized');
   return children;
 };
 
