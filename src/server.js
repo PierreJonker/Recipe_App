@@ -33,6 +33,11 @@ app.use(cors({
 
 app.use(bodyParser.json());
 
+// Root route
+app.get('/', (req, res) => {
+  res.send('Welcome to the API');
+});
+
 // Endpoint to check security question
 app.post('/forgotPassword', async (req, res) => {
   const { email } = req.body;
