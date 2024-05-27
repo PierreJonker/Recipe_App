@@ -1,0 +1,212 @@
+[debug] [2024-05-27T12:05:03.498Z] ----------------------------------------------------------------------
+[debug] [2024-05-27T12:05:03.500Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\jonke\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only functions
+[debug] [2024-05-27T12:05:03.501Z] CLI Version:   13.10.0
+[debug] [2024-05-27T12:05:03.501Z] Platform:      win32
+[debug] [2024-05-27T12:05:03.501Z] Node Version:  v20.12.0
+[debug] [2024-05-27T12:05:03.501Z] Time:          Mon May 27 2024 14:05:03 GMT+0200 (South Africa Standard Time)
+[debug] [2024-05-27T12:05:03.501Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-05-27T12:05:03.573Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-05-27T12:05:03.574Z] > authorizing via signed-in user (jonkepierre637@gmail.com)
+[debug] [2024-05-27T12:05:03.577Z] [iam] checking project recipesharingapp-1be92 for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]
+[debug] [2024-05-27T12:05:03.579Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/recipesharingapp-1be92:testIamPermissions [none]
+[debug] [2024-05-27T12:05:03.579Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/recipesharingapp-1be92:testIamPermissions x-goog-quota-user=projects/recipesharingapp-1be92
+[debug] [2024-05-27T12:05:03.579Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/recipesharingapp-1be92:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2024-05-27T12:05:05.578Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/recipesharingapp-1be92:testIamPermissions 200
+[debug] [2024-05-27T12:05:05.578Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/recipesharingapp-1be92:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2024-05-27T12:05:05.578Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/recipesharingapp-1be92/serviceAccounts/recipesharingapp-1be92@appspot.gserviceaccount.com:testIamPermissions [none]
+[debug] [2024-05-27T12:05:05.578Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/recipesharingapp-1be92/serviceAccounts/recipesharingapp-1be92@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2024-05-27T12:05:08.343Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/recipesharingapp-1be92/serviceAccounts/recipesharingapp-1be92@appspot.gserviceaccount.com:testIamPermissions 200
+[debug] [2024-05-27T12:05:08.343Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/recipesharingapp-1be92/serviceAccounts/recipesharingapp-1be92@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[info] 
+[info] === Deploying to 'recipesharingapp-1be92'...
+[info] 
+[info] i  deploying functions 
+[debug] [2024-05-27T12:05:08.346Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/recipesharingapp-1be92 [none]
+[debug] [2024-05-27T12:05:09.033Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/recipesharingapp-1be92 200
+[debug] [2024-05-27T12:05:09.033Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/recipesharingapp-1be92 {"projectId":"recipesharingapp-1be92","projectNumber":"845539011706","displayName":"RecipeSharingApp","name":"projects/recipesharingapp-1be92","resources":{"hostingSite":"recipesharingapp-1be92"},"state":"ACTIVE","etag":"1_99ca395b-9eeb-4c3d-a321-8426388c50f8"}
+[info] i  functions: preparing codebase default for deployment 
+[info] i  functions: ensuring required API cloudfunctions.googleapis.com is enabled... 
+[info] i  functions: ensuring required API cloudbuild.googleapis.com is enabled... 
+[info] i  artifactregistry: ensuring required API artifactregistry.googleapis.com is enabled... 
+[debug] [2024-05-27T12:05:09.035Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/recipesharingapp-1be92/services/cloudfunctions.googleapis.com [none]
+[debug] [2024-05-27T12:05:09.035Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/recipesharingapp-1be92/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/recipesharingapp-1be92
+[debug] [2024-05-27T12:05:09.036Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/recipesharingapp-1be92/services/runtimeconfig.googleapis.com [none]
+[debug] [2024-05-27T12:05:09.036Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/recipesharingapp-1be92/services/runtimeconfig.googleapis.com x-goog-quota-user=projects/recipesharingapp-1be92
+[debug] [2024-05-27T12:05:09.037Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/recipesharingapp-1be92/services/cloudbuild.googleapis.com [none]
+[debug] [2024-05-27T12:05:09.037Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/recipesharingapp-1be92/services/cloudbuild.googleapis.com x-goog-quota-user=projects/recipesharingapp-1be92
+[debug] [2024-05-27T12:05:09.038Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/recipesharingapp-1be92/services/artifactregistry.googleapis.com [none]
+[debug] [2024-05-27T12:05:09.038Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/recipesharingapp-1be92/services/artifactregistry.googleapis.com x-goog-quota-user=projects/recipesharingapp-1be92
+[debug] [2024-05-27T12:05:11.249Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/recipesharingapp-1be92/services/runtimeconfig.googleapis.com 200
+[debug] [2024-05-27T12:05:11.249Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/recipesharingapp-1be92/services/runtimeconfig.googleapis.com [omitted]
+[debug] [2024-05-27T12:05:11.285Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/recipesharingapp-1be92/services/cloudfunctions.googleapis.com 200
+[debug] [2024-05-27T12:05:11.285Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/recipesharingapp-1be92/services/cloudfunctions.googleapis.com [omitted]
+[info] +  functions: required API cloudfunctions.googleapis.com is enabled 
+[debug] [2024-05-27T12:05:11.286Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/recipesharingapp-1be92/services/artifactregistry.googleapis.com 200
+[debug] [2024-05-27T12:05:11.286Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/recipesharingapp-1be92/services/artifactregistry.googleapis.com [omitted]
+[info] +  artifactregistry: required API artifactregistry.googleapis.com is enabled 
+[debug] [2024-05-27T12:05:11.288Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/recipesharingapp-1be92/services/cloudbuild.googleapis.com 200
+[debug] [2024-05-27T12:05:11.288Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/recipesharingapp-1be92/services/cloudbuild.googleapis.com [omitted]
+[info] +  functions: required API cloudbuild.googleapis.com is enabled 
+[debug] [2024-05-27T12:05:11.289Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/recipesharingapp-1be92/adminSdkConfig [none]
+[debug] [2024-05-27T12:05:11.644Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/recipesharingapp-1be92/adminSdkConfig 200
+[debug] [2024-05-27T12:05:11.644Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/recipesharingapp-1be92/adminSdkConfig {"projectId":"recipesharingapp-1be92","storageBucket":"recipesharingapp-1be92.appspot.com"}
+[debug] [2024-05-27T12:05:11.644Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/recipesharingapp-1be92/configs [none]
+[debug] [2024-05-27T12:05:12.478Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/recipesharingapp-1be92/configs 200
+[debug] [2024-05-27T12:05:12.478Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/recipesharingapp-1be92/configs {}
+[debug] [2024-05-27T12:05:12.479Z] Validating nodejs source
+[debug] [2024-05-27T12:05:13.640Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^12.1.0",
+    "firebase-functions": "^5.0.0"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2024-05-27T12:05:13.640Z] Building nodejs source
+[info] i  functions: Loading and analyzing source code for codebase default to determine what to deploy 
+[debug] [2024-05-27T12:05:13.641Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-05-27T12:05:13.647Z] Found firebase-functions binary at 'C:\Recipe_App\functions\node_modules\.bin\firebase-functions'
+[info] Serving at port 8054
+
+[debug] [2024-05-27T12:05:14.052Z] Got response from /__/functions.yaml {"endpoints":{"api":{"platform":"gcfv1","availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"serviceAccountEmail":null,"vpc":null,"httpsTrigger":{},"entryPoint":"api"}},"specVersion":"v1alpha1","requiredAPIs":[]}
+[info] i  functions: preparing functions directory for uploading... 
+[info] i  functions: packaged C:\Recipe_App\functions (67.23 KB) for uploading 
+[debug] [2024-05-27T12:05:19.110Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v1/projects/recipesharingapp-1be92/locations/-/functions [none]
+[debug] [2024-05-27T12:05:20.041Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v1/projects/recipesharingapp-1be92/locations/-/functions 200
+[debug] [2024-05-27T12:05:20.041Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v1/projects/recipesharingapp-1be92/locations/-/functions {"functions":[{"name":"projects/recipesharingapp-1be92/locations/us-central1/functions/api","httpsTrigger":{"url":"https://us-central1-recipesharingapp-1be92.cloudfunctions.net/api","securityLevel":"SECURE_ALWAYS"},"status":"ACTIVE","entryPoint":"api","timeout":"60s","availableMemoryMb":256,"serviceAccountEmail":"recipesharingapp-1be92@appspot.gserviceaccount.com","updateTime":"2024-05-26T13:26:13.202Z","versionId":"1","labels":{"deployment-tool":"cli-firebase","firebase-functions-hash":"5b5f9d4a186cb1df0d7a3dc157cd8262ffe65505"},"sourceUploadUrl":"https://storage.googleapis.com/uploads-754982556956.us-central1.cloudfunctions.appspot.com/e50e6ba2-9ae3-4dc9-9457-6d83ed4d1d0f.zip","environmentVariables":{"FIREBASE_CONFIG":"{\"projectId\":\"recipesharingapp-1be92\",\"storageBucket\":\"recipesharingapp-1be92.appspot.com\"}","GCLOUD_PROJECT":"recipesharingapp-1be92","EVENTARC_CLOUD_EVENT_SOURCE":"projects/recipesharingapp-1be92/locations/us-central1/functions/api"},"runtime":"nodejs18","ingressSettings":"ALLOW_ALL","buildId":"324cfa60-a593-414c-bfa8-12dba6c9aa1b","buildEnvironmentVariables":{"GOOGLE_NODE_RUN_SCRIPTS":""},"buildName":"projects/845539011706/locations/us-central1/builds/324cfa60-a593-414c-bfa8-12dba6c9aa1b","dockerRegistry":"ARTIFACT_REGISTRY","automaticUpdatePolicy":{}}]}
+[debug] [2024-05-27T12:05:20.042Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v2/projects/recipesharingapp-1be92/locations/-/functions filter=environment%3D%22GEN_2%22
+[debug] [2024-05-27T12:05:21.157Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v2/projects/recipesharingapp-1be92/locations/-/functions 200
+[debug] [2024-05-27T12:05:21.157Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v2/projects/recipesharingapp-1be92/locations/-/functions {}
+[debug] [2024-05-27T12:05:21.159Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/recipesharingapp-1be92 [none]
+[debug] [2024-05-27T12:05:21.803Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/recipesharingapp-1be92 200
+[debug] [2024-05-27T12:05:21.803Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/recipesharingapp-1be92 {"projectId":"recipesharingapp-1be92","projectNumber":"845539011706","displayName":"RecipeSharingApp","name":"projects/recipesharingapp-1be92","resources":{"hostingSite":"recipesharingapp-1be92"},"state":"ACTIVE","etag":"1_99ca395b-9eeb-4c3d-a321-8426388c50f8"}
+[debug] [2024-05-27T12:05:21.804Z] >>> [apiv2][query] POST https://cloudfunctions.googleapis.com/v1/projects/recipesharingapp-1be92/locations/us-central1/functions:generateUploadUrl [none]
+[debug] [2024-05-27T12:05:21.804Z] >>> [apiv2][body] POST https://cloudfunctions.googleapis.com/v1/projects/recipesharingapp-1be92/locations/us-central1/functions:generateUploadUrl {}
+[debug] [2024-05-27T12:05:22.539Z] <<< [apiv2][status] POST https://cloudfunctions.googleapis.com/v1/projects/recipesharingapp-1be92/locations/us-central1/functions:generateUploadUrl 200
+[debug] [2024-05-27T12:05:22.539Z] <<< [apiv2][body] POST https://cloudfunctions.googleapis.com/v1/projects/recipesharingapp-1be92/locations/us-central1/functions:generateUploadUrl {"uploadUrl":"https://storage.googleapis.com/uploads-754982556956.us-central1.cloudfunctions.appspot.com/7e499794-2ca9-4eb5-af4e-d4a5a34fe805.zip?GoogleAccessId=service-845539011706@gcf-admin-robot.iam.gserviceaccount.com&Expires=1716813321&Signature=Ji0sciiTSqhyPIYwXKODiNNuizSm%2F0B41dmONBzoeYRYT3Mo81u08ey6cWH4x1M4%2FFrS4M%2B28PRm4VxujGjIpOQMKK5p1vOCJiponTAk%2BAMqbeZtTwtXRPgxk7ZB5gtx5Lb63dczDlGTDae2i%2BuS%2BxmHxGnIZDne00Klr%2FjdOKk%2BdSjvElvLRIgrfh18ewMTepniTZ3ahM%2FiLJSVOQ8ZxkXptxo6M9njBd%2BtKc7%2FxF3I8iMyZIjcjOgQy9qOVR11jJz9kaOcr6q5Y53zZ6zEYUvh%2BFVbRs4niNOYXHf2w6%2Fj31W8DMdwaGg1QPCDRS0znap0HuHf0uDZgLG1byNiug%3D%3D"}
+[debug] [2024-05-27T12:05:22.540Z] >>> [apiv2][query] PUT https://storage.googleapis.com/uploads-754982556956.us-central1.cloudfunctions.appspot.com/7e499794-2ca9-4eb5-af4e-d4a5a34fe805.zip GoogleAccessId=service-845539011706%40gcf-admin-robot.iam.gserviceaccount.com&Expires=1716813321&Signature=Ji0sciiTSqhyPIYwXKODiNNuizSm%2F0B41dmONBzoeYRYT3Mo81u08ey6cWH4x1M4%2FFrS4M%2B28PRm4VxujGjIpOQMKK5p1vOCJiponTAk%2BAMqbeZtTwtXRPgxk7ZB5gtx5Lb63dczDlGTDae2i%2BuS%2BxmHxGnIZDne00Klr%2FjdOKk%2BdSjvElvLRIgrfh18ewMTepniTZ3ahM%2FiLJSVOQ8ZxkXptxo6M9njBd%2BtKc7%2FxF3I8iMyZIjcjOgQy9qOVR11jJz9kaOcr6q5Y53zZ6zEYUvh%2BFVbRs4niNOYXHf2w6%2Fj31W8DMdwaGg1QPCDRS0znap0HuHf0uDZgLG1byNiug%3D%3D
+[debug] [2024-05-27T12:05:22.540Z] >>> [apiv2][body] PUT https://storage.googleapis.com/uploads-754982556956.us-central1.cloudfunctions.appspot.com/7e499794-2ca9-4eb5-af4e-d4a5a34fe805.zip [stream]
+[debug] [2024-05-27T12:05:24.837Z] <<< [apiv2][status] PUT https://storage.googleapis.com/uploads-754982556956.us-central1.cloudfunctions.appspot.com/7e499794-2ca9-4eb5-af4e-d4a5a34fe805.zip 200
+[debug] [2024-05-27T12:05:24.838Z] <<< [apiv2][body] PUT https://storage.googleapis.com/uploads-754982556956.us-central1.cloudfunctions.appspot.com/7e499794-2ca9-4eb5-af4e-d4a5a34fe805.zip [omitted]
+[info] +  functions: functions folder uploaded successfully 
+[info] i  functions: updating Node.js 18 (1st Gen) function api(us-central1)... 
+[debug] [2024-05-27T12:05:24.841Z] >>> [apiv2][query] PATCH https://cloudfunctions.googleapis.com/v1/projects/recipesharingapp-1be92/locations/us-central1/functions/api updateMask=name%2CsourceUploadUrl%2CentryPoint%2Cruntime%2CdockerRegistry%2Clabels%2ChttpsTrigger.securityLevel%2CminInstances%2CmaxInstances%2CingressSettings%2CenvironmentVariables%2CserviceAccountEmail%2CavailableMemoryMb%2Ctimeout%2CvpcConnector%2CvpcConnectorEgressSettings%2CsourceToken%2CbuildEnvironmentVariables
+[debug] [2024-05-27T12:05:24.841Z] >>> [apiv2][body] PATCH https://cloudfunctions.googleapis.com/v1/projects/recipesharingapp-1be92/locations/us-central1/functions/api {"name":"projects/recipesharingapp-1be92/locations/us-central1/functions/api","sourceUploadUrl":"https://storage.googleapis.com/uploads-754982556956.us-central1.cloudfunctions.appspot.com/7e499794-2ca9-4eb5-af4e-d4a5a34fe805.zip?GoogleAccessId=service-845539011706@gcf-admin-robot.iam.gserviceaccount.com&Expires=1716813321&Signature=Ji0sciiTSqhyPIYwXKODiNNuizSm%2F0B41dmONBzoeYRYT3Mo81u08ey6cWH4x1M4%2FFrS4M%2B28PRm4VxujGjIpOQMKK5p1vOCJiponTAk%2BAMqbeZtTwtXRPgxk7ZB5gtx5Lb63dczDlGTDae2i%2BuS%2BxmHxGnIZDne00Klr%2FjdOKk%2BdSjvElvLRIgrfh18ewMTepniTZ3ahM%2FiLJSVOQ8ZxkXptxo6M9njBd%2BtKc7%2FxF3I8iMyZIjcjOgQy9qOVR11jJz9kaOcr6q5Y53zZ6zEYUvh%2BFVbRs4niNOYXHf2w6%2Fj31W8DMdwaGg1QPCDRS0znap0HuHf0uDZgLG1byNiug%3D%3D","entryPoint":"api","runtime":"nodejs18","dockerRegistry":"ARTIFACT_REGISTRY","labels":{"deployment-tool":"cli-firebase","firebase-functions-hash":"02cd7134371c9fdce127ce3473ead7c154944081"},"httpsTrigger":{"securityLevel":"SECURE_ALWAYS"},"minInstances":null,"maxInstances":null,"ingressSettings":null,"environmentVariables":{"FIREBASE_CONFIG":"{\"projectId\":\"recipesharingapp-1be92\",\"storageBucket\":\"recipesharingapp-1be92.appspot.com\"}","GCLOUD_PROJECT":"recipesharingapp-1be92","EVENTARC_CLOUD_EVENT_SOURCE":"projects/recipesharingapp-1be92/locations/us-central1/functions/api"},"serviceAccountEmail":null,"availableMemoryMb":null,"timeout":null,"vpcConnector":null,"vpcConnectorEgressSettings":null,"buildEnvironmentVariables":{"GOOGLE_NODE_RUN_SCRIPTS":""}}
+[debug] [2024-05-27T12:05:25.407Z] <<< [apiv2][status] PATCH https://cloudfunctions.googleapis.com/v1/projects/recipesharingapp-1be92/locations/us-central1/functions/api 403
+[debug] [2024-05-27T12:05:25.407Z] <<< [apiv2][body] PATCH https://cloudfunctions.googleapis.com/v1/projects/recipesharingapp-1be92/locations/us-central1/functions/api {"error":{"code":403,"message":"Unable to retrieve the repository metadata for projects/recipesharingapp-1be92/locations/us-central1/repositories/gcf-artifacts. Ensure that the Cloud Functions service account has 'artifactregistry.repositories.list' and 'artifactregistry.repositories.get' permissions. You can add the permissions by granting the role 'roles/artifactregistry.reader'.","status":"PERMISSION_DENIED"}}
+[warn] !  functions: failed to update function projects/recipesharingapp-1be92/locations/us-central1/functions/api 
+[error] Failed to update function projects/recipesharingapp-1be92/locations/us-central1/functions/api
+[debug] [2024-05-27T12:05:25.412Z] Total Function Deployment time: 569
+[debug] [2024-05-27T12:05:25.412Z] 1 Functions Deployed
+[debug] [2024-05-27T12:05:25.412Z] 1 Functions Errored
+[debug] [2024-05-27T12:05:25.412Z] 0 Function Deployments Aborted
+[debug] [2024-05-27T12:05:25.412Z] Average Function Deployment time: 568
+[info] 
+[info] Functions deploy had errors with the following functions:
+	api(us-central1)
+[debug] [2024-05-27T12:05:26.033Z] Not printing URL for HTTPS function. Typically this means it didn't match a filter or we failed deployment
+[info] i  functions: cleaning up build files... 
+[debug] [2024-05-27T12:05:26.034Z] >>> [apiv2][query] DELETE https://artifactregistry.googleapis.com/v1beta2/projects/recipesharingapp-1be92/locations/us-central1/repositories/gcf-artifacts/packages/api [none]
+[debug] [2024-05-27T12:05:26.035Z] >>> [apiv2][query] GET https://us.gcr.io/v2/recipesharingapp-1be92/gcf/us-central1/tags/list [none]
+[debug] [2024-05-27T12:05:26.801Z] <<< [apiv2][status] GET https://us.gcr.io/v2/recipesharingapp-1be92/gcf/us-central1/tags/list 403
+[debug] [2024-05-27T12:05:26.802Z] <<< [apiv2][body] GET https://us.gcr.io/v2/recipesharingapp-1be92/gcf/us-central1/tags/list {"errors":[{"code":"DENIED","message":"This API method requires billing to be enabled. Please enable billing on project #845539011706 by visiting https://console.developers.google.com/billing/enable?project=845539011706 then retry. If you enabled billing for this project recently, wait a few minutes for the action to propagate to our systems and retry."}]}
+[debug] [2024-05-27T12:05:26.802Z] Failed docker command with error  HTTP Error: 403, Unknown Error {"name":"FirebaseError","children":[],"context":{"body":{"errors":[{"code":"DENIED","message":"This API method requires billing to be enabled. Please enable billing on project #845539011706 by visiting https://console.developers.google.com/billing/enable?project=845539011706 then retry. If you enabled billing for this project recently, wait a few minutes for the action to propagate to our systems and retry."}],"error":{"message":"Unknown Error"}},"response":{"statusCode":403}},"exit":1,"message":"HTTP Error: 403, Unknown Error","status":403}
+[debug] [2024-05-27T12:05:26.805Z] >>> [apiv2][query] GET https://us.gcr.io/v2/recipesharingapp-1be92/gcf/us-central1/tags/list [none]
+[debug] [2024-05-27T12:05:27.215Z] <<< [apiv2][status] GET https://us.gcr.io/v2/recipesharingapp-1be92/gcf/us-central1/tags/list 403
+[debug] [2024-05-27T12:05:27.215Z] <<< [apiv2][body] GET https://us.gcr.io/v2/recipesharingapp-1be92/gcf/us-central1/tags/list {"errors":[{"code":"DENIED","message":"This API method requires billing to be enabled. Please enable billing on project #845539011706 by visiting https://console.developers.google.com/billing/enable?project=845539011706 then retry. If you enabled billing for this project recently, wait a few minutes for the action to propagate to our systems and retry."}]}
+[debug] [2024-05-27T12:05:27.215Z] Failed docker command with error  HTTP Error: 403, Unknown Error {"name":"FirebaseError","children":[],"context":{"body":{"errors":[{"code":"DENIED","message":"This API method requires billing to be enabled. Please enable billing on project #845539011706 by visiting https://console.developers.google.com/billing/enable?project=845539011706 then retry. If you enabled billing for this project recently, wait a few minutes for the action to propagate to our systems and retry."}],"error":{"message":"Unknown Error"}},"response":{"statusCode":403}},"exit":1,"message":"HTTP Error: 403, Unknown Error","status":403}
+[debug] [2024-05-27T12:05:27.309Z] <<< [apiv2][status] DELETE https://artifactregistry.googleapis.com/v1beta2/projects/recipesharingapp-1be92/locations/us-central1/repositories/gcf-artifacts/packages/api 403
+[debug] [2024-05-27T12:05:27.309Z] <<< [apiv2][body] DELETE https://artifactregistry.googleapis.com/v1beta2/projects/recipesharingapp-1be92/locations/us-central1/repositories/gcf-artifacts/packages/api {"error":{"code":403,"message":"This API method requires billing to be enabled. Please enable billing on project #recipesharingapp-1be92 by visiting https://console.developers.google.com/billing/enable?project=recipesharingapp-1be92 then retry. If you enabled billing for this project recently, wait a few minutes for the action to propagate to our systems and retry.","status":"PERMISSION_DENIED","details":[{"@type":"type.googleapis.com/google.rpc.Help","links":[{"description":"Google developers console billing","url":"https://console.developers.google.com/billing/enable?project=recipesharingapp-1be92"}]},{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"BILLING_DISABLED","domain":"googleapis.com","metadata":{"service":"artifactregistry.googleapis.com","consumer":"projects/recipesharingapp-1be92"}}]}}
+[debug] [2024-05-27T12:05:27.317Z] >>> [apiv2][query] GET https://us.gcr.io/v2/recipesharingapp-1be92/gcf/us-central1/tags/list [none]
+[debug] [2024-05-27T12:05:27.668Z] <<< [apiv2][status] GET https://us.gcr.io/v2/recipesharingapp-1be92/gcf/us-central1/tags/list 403
+[debug] [2024-05-27T12:05:27.668Z] <<< [apiv2][body] GET https://us.gcr.io/v2/recipesharingapp-1be92/gcf/us-central1/tags/list {"errors":[{"code":"DENIED","message":"This API method requires billing to be enabled. Please enable billing on project #845539011706 by visiting https://console.developers.google.com/billing/enable?project=845539011706 then retry. If you enabled billing for this project recently, wait a few minutes for the action to propagate to our systems and retry."}]}
+[debug] [2024-05-27T12:05:27.668Z] Failed docker command with error  HTTP Error: 403, Unknown Error {"name":"FirebaseError","children":[],"context":{"body":{"errors":[{"code":"DENIED","message":"This API method requires billing to be enabled. Please enable billing on project #845539011706 by visiting https://console.developers.google.com/billing/enable?project=845539011706 then retry. If you enabled billing for this project recently, wait a few minutes for the action to propagate to our systems and retry."}],"error":{"message":"Unknown Error"}},"response":{"statusCode":403}},"exit":1,"message":"HTTP Error: 403, Unknown Error","status":403}
+[warn] !  functions: Unhandled error cleaning up build images. This could result in a small monthly bill if not corrected. You can attempt to delete these images by redeploying or you can delete them manually at
+	https://console.cloud.google.com/artifacts/docker/recipesharingapp-1be92/us-central1/gcf-artifacts
+	https://console.cloud.google.com/gcr/images/recipesharingapp-1be92/us/gcf 
+[debug] [2024-05-27T12:05:27.669Z] Functions deploy failed.
+[debug] [2024-05-27T12:05:27.669Z] {
+  "endpoint": {
+    "id": "api",
+    "project": "recipesharingapp-1be92",
+    "region": "us-central1",
+    "entryPoint": "api",
+    "platform": "gcfv1",
+    "runtime": "nodejs18",
+    "httpsTrigger": {},
+    "ingressSettings": null,
+    "availableMemoryMb": null,
+    "serviceAccount": null,
+    "timeoutSeconds": null,
+    "maxInstances": null,
+    "minInstances": null,
+    "vpc": null,
+    "environmentVariables": {
+      "FIREBASE_CONFIG": "{\"projectId\":\"recipesharingapp-1be92\",\"storageBucket\":\"recipesharingapp-1be92.appspot.com\"}",
+      "GCLOUD_PROJECT": "recipesharingapp-1be92",
+      "EVENTARC_CLOUD_EVENT_SOURCE": "projects/recipesharingapp-1be92/locations/us-central1/functions/api"
+    },
+    "codebase": "default",
+    "securityLevel": "SECURE_ALWAYS",
+    "targetedByOnly": false,
+    "hash": "02cd7134371c9fdce127ce3473ead7c154944081",
+    "labels": {
+      "deployment-tool": "cli-firebase"
+    }
+  },
+  "op": "update",
+  "original": {
+    "name": "FirebaseError",
+    "children": [],
+    "context": {
+      "function": "projects/recipesharingapp-1be92/locations/us-central1/functions/api"
+    },
+    "exit": 1,
+    "message": "Failed to update function projects/recipesharingapp-1be92/locations/us-central1/functions/api",
+    "original": {
+      "name": "FirebaseError",
+      "children": [],
+      "context": {
+        "body": {
+          "error": {
+            "code": 403,
+            "message": "Unable to retrieve the repository metadata for projects/recipesharingapp-1be92/locations/us-central1/repositories/gcf-artifacts. Ensure that the Cloud Functions service account has 'artifactregistry.repositories.list' and 'artifactregistry.repositories.get' permissions. You can add the permissions by granting the role 'roles/artifactregistry.reader'.",
+            "status": "PERMISSION_DENIED"
+          }
+        },
+        "response": {
+          "statusCode": 403
+        }
+      },
+      "exit": 1,
+      "message": "HTTP Error: 403, Unable to retrieve the repository metadata for projects/recipesharingapp-1be92/locations/us-central1/repositories/gcf-artifacts. Ensure that the Cloud Functions service account has 'artifactregistry.repositories.list' and 'artifactregistry.repositories.get' permissions. You can add the permissions by granting the role 'roles/artifactregistry.reader'.",
+      "status": 403
+    },
+    "status": 403,
+    "code": 403
+  }
+}
+[debug] [2024-05-27T12:05:27.914Z] Error: Failed to update function api in region us-central1
+    at C:\Users\jonke\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\functions\release\fabricator.js:52:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Fabricator.updateV1Function (C:\Users\jonke\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\functions\release\fabricator.js:352:32)
+    at async Fabricator.updateEndpoint (C:\Users\jonke\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\functions\release\fabricator.js:152:13)
+    at async handle (C:\Users\jonke\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\functions\release\fabricator.js:89:17)
+[error] 
+[error] Error: There was an error deploying functions

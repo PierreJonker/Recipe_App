@@ -1,0 +1,16 @@
+{
+  "projects": {
+    "default": "recipesharingapp-1be92"
+  },
+  "targets": {
+    "recipesharingapp-1be92": {
+      "hosting": {
+        "app": [
+          "recipesharingapp-1be92"
+        ]
+      }
+    }
+  },
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
+}
