@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { HashRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Header from './components/Header';
 import RecipeList from './components/RecipeList';
 import RecipeForm from './components/RecipeForm';
@@ -20,7 +20,7 @@ import './App.css';
 
 function App() {
   return (
-    <Router basename="/Recipe_App">
+    <Router>
       <Header />
       <Container className="flex-grow-1">
         <Routes>
