@@ -36,11 +36,11 @@ const PrivateRoute = ({ children, requiresAdmin = false }) => {
   }
 
   if (!user) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/Recipe_App/login" />;
   }
 
   if (requiresAdmin && !isAdmin) {
-    return <Navigate to="/" />;
+    return <Navigate to="/Recipe_App/" />;
   }
 
   return children;
