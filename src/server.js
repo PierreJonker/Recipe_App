@@ -3,13 +3,15 @@ const admin = require('firebase-admin');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const { v4: uuidv4 } = require('uuid');
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
 // Initialize the app with a service account, granting admin privileges
-const serviceAccount = require('./serviceAccountKey.json');
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: 'https://recipesharingapp-1be92.firebaseio.com' // Update with your database URL
+  databaseURL: process.env.FIREBASE_DATABASE_URL
 });
 
 const app = express();
@@ -175,3 +177,5 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+module.exports = app;
