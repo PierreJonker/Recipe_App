@@ -166,5 +166,34 @@ app.delete('/supportTicket/:id', async (req, res) => {
   }
 });
 
+// deleteRecipe endpoint
+app.delete('/recipe/:id', async (req, res) => {
+  const { id } = req.params;
+  const firestore = admin.firestore();
+
+  try {
+    await firestore.collection('recipes').doc(id).delete();
+    res.status(200).send('Recipe deleted successfully');
+  } catch (error) {
+    console.error('Error deleting recipe:', error);
+    res.status(400).send('Error deleting recipe: ' + error.message);
+  }
+});
+
+// deleteUser endpoint
+app.delete('/user/:id', async (req, res) => {
+  const { id } = req.params;
+  const firestore = admin.firestore();
+
+  try {
+    await admin.auth().deleteUser(id);
+    await firestore.collection('users').doc(id).delete();
+    res.status(200).send('User deleted successfully');
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    res.status(400).send('Error deleting user: ' + error.message);
+  }
+});
+
 // Export the API to Firebase Cloud Functions
 exports.api = functions.https.onRequest(app);

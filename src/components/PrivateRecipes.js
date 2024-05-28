@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { getFirestore, collection, query, where, getDocs, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { Container, Button, Form } from 'react-bootstrap';
+import axios from 'axios';
 
 const PrivateRecipes = () => {
   const [recipes, setRecipes] = useState([]);
@@ -25,7 +26,7 @@ const PrivateRecipes = () => {
 
   const handleDelete = async (id) => {
     try {
-      await deleteDoc(doc(firestore, 'recipes', id));
+      await axios.delete(`https://us-central1-recipesharingapp-1be92.cloudfunctions.net/api/recipe/${id}`);
       setRecipes(recipes.filter(recipe => recipe.id !== id));
     } catch (error) {
       console.error('Error deleting recipe:', error);
