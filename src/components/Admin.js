@@ -47,6 +47,16 @@ const Admin = () => {
     }
   };
 
+  const handleDeleteUser = async (userId) => {
+    try {
+      const firestore = getFirestore();
+      await deleteDoc(doc(firestore, 'users', userId));
+      setUsers(users.filter(user => user.id !== userId));
+    } catch (error) {
+      setError('Failed to delete user');
+    }
+  };
+
   const handleResetPassword = async (userId) => {
     const firestore = getFirestore();
     try {
@@ -93,21 +103,23 @@ const Admin = () => {
     }
   };
 
-  const handleViewTicket = (ticket) => {
-    setCurrentTicket(ticket);
-    setShowTicketModal(true);
+  const handleViewTicket = async (ticketId) => {
+    const firestore = getFirestore();
+    const ticketDoc = await getDoc(doc(firestore, 'supportTickets', ticketId));
+    if (ticketDoc.exists()) {
+      setCurrentTicket(ticketDoc.data());
+      setShowTicketModal(true);
+    }
   };
 
   const handleReply = async () => {
     if (currentTicket && reply) {
-      const response = await axios.post(`https://us-central1-recipesharingapp-1be92.cloudfunctions.net/api/supportTicket/${currentTicket.id}/respond`, { reply });
+      const response = await axios.post(`https://us-central1-recipesharingapp-1be92.cloudfunctions.net/api/supportTicket/${currentTicket.uniqueIdentifier}/respond`, { reply });
       if (response.status === 200) {
-        const updatedTickets = supportTickets.map(ticket =>
-          ticket.id === currentTicket.id ? { ...ticket, reply } : ticket
-        );
-        setSupportTickets(updatedTickets);
+        const updatedReplies = [...(currentTicket.replies || []), { reply, role: 'Admin', timestamp: new Date().toISOString() }];
+        setCurrentTicket({ ...currentTicket, replies: updatedReplies });
+        setSupportTickets(supportTickets.map(ticket => ticket.uniqueIdentifier === currentTicket.uniqueIdentifier ? { ...ticket, replies: updatedReplies } : ticket));
         setReply('');
-        setShowTicketModal(false);
         alert('Reply sent successfully');
       } else {
         alert('Error sending reply');
@@ -119,7 +131,7 @@ const Admin = () => {
     try {
       const response = await axios.delete(`https://us-central1-recipesharingapp-1be92.cloudfunctions.net/api/supportTicket/${ticketId}`);
       if (response.status === 200) {
-        setSupportTickets(supportTickets.filter(ticket => ticket.id !== ticketId));
+        setSupportTickets(supportTickets.filter(ticket => ticket.uniqueIdentifier !== ticketId));
         alert('Support ticket deleted successfully');
       } else {
         console.error('Error deleting support ticket:', response.data);
@@ -156,6 +168,7 @@ const Admin = () => {
               <td>{user.admin ? 'Yes' : 'No'}</td>
               <td>
                 <Button variant="warning" onClick={() => handleResetPassword(user.id)}>Reset Password</Button>
+                <Button variant="danger" onClick={() => handleDeleteUser(user.id)}>Delete</Button>
               </td>
             </tr>
           ))}
@@ -198,13 +211,13 @@ const Admin = () => {
         </thead>
         <tbody>
           {supportTickets.map(ticket => (
-            <tr key={ticket.id}>
+            <tr key={ticket.uniqueIdentifier}>
               <td>{ticket.email}</td>
               <td>{ticket.subject}</td>
               <td>{ticket.message}</td>
               <td>
-                <Button variant="primary" onClick={() => handleViewTicket(ticket)}>View</Button>
-                <Button variant="danger" onClick={() => handleDeleteTicket(ticket.id)}>Delete</Button>
+                <Button variant="primary" onClick={() => handleViewTicket(ticket.uniqueIdentifier)}>View</Button>
+                <Button variant="danger" onClick={() => handleDeleteTicket(ticket.uniqueIdentifier)}>Delete</Button>
               </td>
             </tr>
           ))}
@@ -242,11 +255,11 @@ const Admin = () => {
               <p><strong>Email:</strong> {currentTicket.email}</p>
               <p><strong>Subject:</strong> {currentTicket.subject}</p>
               <p><strong>Message:</strong> {currentTicket.message}</p>
-              {currentTicket.reply && (
-                <>
-                  <p><strong>Admin Reply:</strong> {currentTicket.reply}</p>
-                </>
-              )}
+              {currentTicket.replies && currentTicket.replies.map((reply, index) => (
+                <div key={index}>
+                  <strong>{reply.role} ({new Date(reply.timestamp).toLocaleString()}):</strong> {reply.reply}
+                </div>
+              ))}
               <Form.Group controlId="formReply">
                 <Form.Label>Reply</Form.Label>
                 <Form.Control

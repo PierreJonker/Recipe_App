@@ -5,7 +5,7 @@ import { Container } from 'react-bootstrap';
 const Home = () => {
   return (
     <Container>
-      <h2>Welcome to RecipeApp</h2>
+      <h2>Welcome to Recipe Sharing App</h2>
       <p>This application is designed to help you share and manage your favorite recipes. You can create, edit, and share your recipes with the public or keep them private. You can also save drafts to work on them later.</p>
       <p>Developed by Pierre Jonker.</p>
       <h3>How it works:</h3>

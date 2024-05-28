@@ -1,4 +1,3 @@
-// src/components/PrivateRecipes.js
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getFirestore, collection, query, where, getDocs, deleteDoc, doc, updateDoc } from 'firebase/firestore';
@@ -25,13 +24,21 @@ const PrivateRecipes = () => {
   }, [user, firestore]);
 
   const handleDelete = async (id) => {
-    await deleteDoc(doc(firestore, 'recipes', id));
-    setRecipes(recipes.filter(recipe => recipe.id !== id));
+    try {
+      await deleteDoc(doc(firestore, 'recipes', id));
+      setRecipes(recipes.filter(recipe => recipe.id !== id));
+    } catch (error) {
+      console.error('Error deleting recipe:', error);
+    }
   };
 
   const handleChangeStatus = async (id, newStatus) => {
-    await updateDoc(doc(firestore, 'recipes', id), { status: newStatus });
-    setRecipes(recipes.map(recipe => recipe.id === id ? { ...recipe, status: newStatus } : recipe));
+    try {
+      await updateDoc(doc(firestore, 'recipes', id), { status: newStatus });
+      setRecipes(recipes.map(recipe => recipe.id === id ? { ...recipe, status: newStatus } : recipe));
+    } catch (error) {
+      console.error('Error updating recipe status:', error);
+    }
   };
 
   return (
