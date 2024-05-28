@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Alert, Modal, Form } from 'react-bootstrap';
-import { getFirestore, collection, getDocs, deleteDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, deleteDoc, doc, getDoc } from 'firebase/firestore';
 import axios from 'axios';
 
 const Admin = () => {
@@ -61,8 +61,10 @@ const Admin = () => {
           } while (newPassword.length < 6);
 
           const response = await axios.post('https://us-central1-recipesharingapp-1be92.cloudfunctions.net/api/resetPassword', {
-            uid: userId,
+            email: userDoc.data().email,
+            securityAnswer: userAnswer,
             newPassword: newPassword,
+            uid: userId,
           });
           if (response.status === 200) {
             alert('Password reset successfully!');
