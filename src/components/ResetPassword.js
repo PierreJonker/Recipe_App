@@ -6,10 +6,10 @@ const ResetPassword = () => {
   const [email, setEmail] = useState('');
   const [securityAnswer, setSecurityAnswer] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [uid, setUid] = useState('');
   const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleResetPassword = async (e) => {
     e.preventDefault();
     setError(null);
 
@@ -19,14 +19,13 @@ const ResetPassword = () => {
     }
 
     try {
-      const response = await axios.post('https://us-central1-your-project-id.cloudfunctions.net/api/resetPassword', {
+      await axios.post('https://us-central1-recipesharingapp-1be92.cloudfunctions.net/api/resetPassword', {
         email,
         securityAnswer,
-        newPassword
+        newPassword,
+        uid
       });
-      if (response.status === 200) {
-        setSuccess(true);
-      }
+      alert('Password reset successfully!');
     } catch (error) {
       setError('Error resetting password: ' + error.message);
     }
@@ -36,8 +35,7 @@ const ResetPassword = () => {
     <div>
       <h2>Reset Password</h2>
       {error && <Alert variant="danger">{error}</Alert>}
-      {success && <Alert variant="success">Password reset successfully</Alert>}
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleResetPassword}>
         <Form.Group controlId="formEmail">
           <Form.Label>Email</Form.Label>
           <Form.Control
@@ -60,9 +58,18 @@ const ResetPassword = () => {
           <Form.Label>New Password</Form.Label>
           <Form.Control
             type="password"
-            placeholder="Enter new password"
+            placeholder="Enter your new password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
+          />
+        </Form.Group>
+        <Form.Group controlId="formUid">
+          <Form.Label>UID (for admin use only)</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter the user ID (leave blank if not an admin)"
+            value={uid}
+            onChange={(e) => setUid(e.target.value)}
           />
         </Form.Group>
         <Button variant="primary" type="submit">Submit</Button>

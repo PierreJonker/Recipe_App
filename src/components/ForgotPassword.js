@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -9,27 +8,22 @@ const ForgotPassword = () => {
   const [securityAnswer, setSecurityAnswer] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
-  const navigate = useNavigate();
+  const [step, setStep] = useState(1);
 
-  const handleEmailSubmit = async (e) => {
+  const handleSubmitEmail = async (e) => {
     e.preventDefault();
     setError(null);
 
-    if (!email) {
-      setError('Email is required');
-      return;
-    }
-
     try {
-      const response = await axios.post('https://us-central1-your-project-id.cloudfunctions.net/api/forgotPassword', { email });
+      const response = await axios.post('https://us-central1-recipesharingapp-1be92.cloudfunctions.net/api/forgotPassword', { email });
       setSecurityQuestion(response.data.securityQuestion);
+      setStep(2);
     } catch (error) {
       setError('Error initiating password reset: ' + error.message);
     }
   };
 
-  const handlePasswordReset = async (e) => {
+  const handleSubmitAnswer = async (e) => {
     e.preventDefault();
     setError(null);
 
@@ -39,15 +33,8 @@ const ForgotPassword = () => {
     }
 
     try {
-      const response = await axios.post('https://us-central1-your-project-id.cloudfunctions.net/api/resetPassword', {
-        email,
-        securityAnswer,
-        newPassword
-      });
-      if (response.status === 200) {
-        setSuccess(true);
-        navigate('/login'); // Redirect to login page after successful password reset
-      }
+      await axios.post('https://us-central1-recipesharingapp-1be92.cloudfunctions.net/api/resetPassword', { email, securityAnswer, newPassword });
+      setStep(3);
     } catch (error) {
       setError('Error resetting password: ' + error.message);
     }
@@ -57,9 +44,8 @@ const ForgotPassword = () => {
     <div>
       <h2>Forgot Password</h2>
       {error && <Alert variant="danger">{error}</Alert>}
-      {success && <Alert variant="success">Password reset successfully</Alert>}
-      {!securityQuestion ? (
-        <Form onSubmit={handleEmailSubmit}>
+      {step === 1 && (
+        <Form onSubmit={handleSubmitEmail}>
           <Form.Group controlId="formEmail">
             <Form.Label>Email</Form.Label>
             <Form.Control
@@ -71,21 +57,22 @@ const ForgotPassword = () => {
           </Form.Group>
           <Button variant="primary" type="submit">Submit</Button>
         </Form>
-      ) : (
-        <Form onSubmit={handlePasswordReset}>
+      )}
+      {step === 2 && (
+        <Form onSubmit={handleSubmitAnswer}>
           <Form.Group controlId="formSecurityQuestion">
             <Form.Label>Security Question</Form.Label>
             <Form.Control
               type="text"
               value={securityQuestion}
-              readOnly
+              disabled
             />
           </Form.Group>
           <Form.Group controlId="formSecurityAnswer">
             <Form.Label>Security Answer</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Enter your answer"
+              placeholder="Enter your security answer"
               value={securityAnswer}
               onChange={(e) => setSecurityAnswer(e.target.value)}
             />
@@ -94,13 +81,16 @@ const ForgotPassword = () => {
             <Form.Label>New Password</Form.Label>
             <Form.Control
               type="password"
-              placeholder="Enter new password"
+              placeholder="Enter your new password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
             />
           </Form.Group>
-          <Button variant="primary" type="submit">Reset Password</Button>
+          <Button variant="primary" type="submit">Submit</Button>
         </Form>
+      )}
+      {step === 3 && (
+        <Alert variant="success">Password reset successfully!</Alert>
       )}
     </div>
   );

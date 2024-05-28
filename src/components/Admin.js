@@ -60,7 +60,7 @@ const Admin = () => {
             newPassword = prompt('Enter the new password (at least 6 characters):');
           } while (newPassword.length < 6);
 
-          const response = await axios.post('https://us-central1-your-project-id.cloudfunctions.net/api/resetPassword', {
+          const response = await axios.post('https://us-central1-recipesharingapp-1be92.cloudfunctions.net/api/resetPassword', {
             uid: userId,
             newPassword: newPassword,
           });
@@ -98,7 +98,7 @@ const Admin = () => {
 
   const handleReply = async () => {
     if (currentTicket && reply) {
-      const response = await axios.post(`https://us-central1-your-project-id.cloudfunctions.net/api/supportTicket/${currentTicket.id}/respond`, { reply });
+      const response = await axios.post(`https://us-central1-recipesharingapp-1be92.cloudfunctions.net/api/supportTicket/${currentTicket.id}/respond`, { reply });
       if (response.status === 200) {
         const updatedTickets = supportTickets.map(ticket =>
           ticket.id === currentTicket.id ? { ...ticket, reply } : ticket
@@ -115,7 +115,7 @@ const Admin = () => {
 
   const handleDeleteTicket = async (ticketId) => {
     try {
-      const response = await axios.delete(`https://us-central1-your-project-id.cloudfunctions.net/api/supportTicket/${ticketId}`);
+      const response = await axios.delete(`https://us-central1-recipesharingapp-1be92.cloudfunctions.net/api/supportTicket/${ticketId}`);
       if (response.status === 200) {
         setSupportTickets(supportTickets.filter(ticket => ticket.id !== ticketId));
         alert('Support ticket deleted successfully');

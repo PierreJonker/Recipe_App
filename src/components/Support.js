@@ -24,7 +24,7 @@ const Support = () => {
     }
 
     try {
-      const response = await axios.post('https://us-central1-your-project-id.cloudfunctions.net/api/supportTicket', {
+      const response = await axios.post('https://us-central1-recipesharingapp-1be92.cloudfunctions.net/api/supportTicket', {
         email,
         subject,
         message,
@@ -49,7 +49,7 @@ const Support = () => {
     }
 
     try {
-      const response = await axios.get(`https://us-central1-your-project-id.cloudfunctions.net/api/supportTicket/${ticketId}`);
+      const response = await axios.get(`https://us-central1-recipesharingapp-1be92.cloudfunctions.net/api/supportTicket/${ticketId}`);
       setTickets([response.data]);
     } catch (error) {
       setError('Error fetching support ticket: ' + error.message);
@@ -64,7 +64,7 @@ const Support = () => {
   const handleReply = async () => {
     try {
       const isAdmin = false; // Change this condition based on your logic to determine if the reply is from an admin
-      await axios.post(`https://us-central1-your-project-id.cloudfunctions.net/api/supportTicket/${currentTicket.uniqueIdentifier}/respond`, { reply, isAdmin });
+      await axios.post(`https://us-central1-recipesharingapp-1be92.cloudfunctions.net/api/supportTicket/${currentTicket.uniqueIdentifier}/respond`, { reply, isAdmin });
       const updatedTickets = tickets.map(ticket =>
         ticket.uniqueIdentifier === currentTicket.uniqueIdentifier ? { ...ticket, replies: [...(ticket.replies || []), { reply, role: 'User', timestamp: new Date().toISOString() }] } : ticket
       );
