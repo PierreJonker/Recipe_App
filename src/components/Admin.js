@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Alert, Modal, Form } from 'react-bootstrap';
-import { getFirestore, collection, getDocs, getDoc } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, deleteDoc, doc, getDoc } from 'firebase/firestore';
 import axios from 'axios';
 
 const Admin = () => {
@@ -39,7 +39,8 @@ const Admin = () => {
 
   const handleDeleteRecipe = async (recipeId) => {
     try {
-      await axios.delete(`https://us-central1-recipesharingapp-1be92.cloudfunctions.net/api/recipe/${recipeId}`);
+      const firestore = getFirestore();
+      await deleteDoc(doc(firestore, 'recipes', recipeId));
       setRecipes(recipes.filter(recipe => recipe.id !== recipeId));
     } catch (error) {
       setError('Failed to delete recipe');
@@ -48,7 +49,8 @@ const Admin = () => {
 
   const handleDeleteUser = async (userId) => {
     try {
-      await axios.delete(`https://us-central1-recipesharingapp-1be92.cloudfunctions.net/api/user/${userId}`);
+      const firestore = getFirestore();
+      await deleteDoc(doc(firestore, 'users', userId));
       setUsers(users.filter(user => user.id !== userId));
     } catch (error) {
       setError('Failed to delete user');
