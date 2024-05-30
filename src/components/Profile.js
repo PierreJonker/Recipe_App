@@ -1,6 +1,6 @@
 // src/components/Profile.js
 import React, { useState, useEffect } from 'react';
-import { getAuth, updateProfile, updateEmail, updatePassword } from 'firebase/auth';
+import { getAuth, updateProfile, updatePassword } from 'firebase/auth';
 import { getFirestore, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { Form, Button, Container } from 'react-bootstrap';
 
@@ -37,10 +37,6 @@ const Profile = () => {
           await updateProfile(user, { displayName: username });
           await updateDoc(doc(firestore, 'users', user.uid), { username });
         }
-        if (email !== user.email) {
-          await updateEmail(user, email);
-          await updateDoc(doc(firestore, 'users', user.uid), { email });
-        }
         if (newPassword) {
           await updatePassword(user, newPassword);
         }
@@ -72,10 +68,10 @@ const Profile = () => {
         <Form.Group controlId="formEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control
-            type="email"
-            placeholder="Enter email"
+            type="text"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            readOnly
+            plaintext
           />
         </Form.Group>
         <Form.Group controlId="formNewPassword">

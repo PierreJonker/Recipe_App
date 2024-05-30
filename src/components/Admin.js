@@ -50,6 +50,9 @@ const Admin = () => {
   const handleDeleteUser = async (userId) => {
     try {
       const firestore = getFirestore();
+      // Delete the user from Firebase Authentication
+      await axios.delete(`https://us-central1-recipesharingapp-1be92.cloudfunctions.net/api/user/${userId}`);
+      // Delete the user's document from Firestore
       await deleteDoc(doc(firestore, 'users', userId));
       setUsers(users.filter(user => user.id !== userId));
     } catch (error) {

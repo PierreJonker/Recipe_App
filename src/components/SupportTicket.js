@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Table, Alert, Modal } from 'react-bootstrap';
-import { getFirestore, collection, addDoc, getDocs, updateDoc, doc } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, updateDoc, doc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
+import axios from 'axios';
 
 const SupportTicket = () => {
   const [subject, setSubject] = useState('');
@@ -11,20 +12,32 @@ const SupportTicket = () => {
   const [showModal, setShowModal] = useState(false);
   const [currentTicket, setCurrentTicket] = useState(null);
   const [reply, setReply] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const auth = getAuth();
   const firestore = getFirestore();
 
   useEffect(() => {
+    const fetchUserData = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        const userDoc = await doc(firestore, 'users', user.uid).get();
+        if (userDoc.exists) {
+          setIsAdmin(userDoc.data().isAdmin || false);
+        }
+      }
+    };
+
     const fetchTickets = async () => {
       const user = auth.currentUser;
       if (user) {
-        const ticketsSnapshot = await getDocs(collection(firestore, `users/${user.uid}/supportTickets`));
+        const ticketsSnapshot = await getDocs(collection(firestore, 'supportTickets'));
         const ticketsList = ticketsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setTickets(ticketsList);
       }
     };
 
+    fetchUserData();
     fetchTickets();
   }, [auth, firestore]);
 
@@ -44,11 +57,12 @@ const SupportTicket = () => {
     }
 
     try {
-      await addDoc(collection(firestore, `users/${user.uid}/supportTickets`), {
+      await axios.post('https://us-central1-recipesharingapp-1be92.cloudfunctions.net/api/supportTicket', {
+        email: user.email,
         subject,
         message,
-        createdAt: new Date().toISOString(),
-        replies: []
+        userId: user.uid,
+        issueType: 'other'
       });
       setSubject('');
       setMessage('');
@@ -71,12 +85,19 @@ const SupportTicket = () => {
     }
 
     try {
-      await updateDoc(doc(firestore, `users/${user.uid}/supportTickets`, currentTicket.id), {
-        replies: [...currentTicket.replies, { reply, role: 'User', timestamp: new Date().toISOString() }]
+      await axios.post(`https://us-central1-recipesharingapp-1be92.cloudfunctions.net/api/supportTicket/${currentTicket.id}/respond`, {
+        reply,
+        isAdmin,
+        uid: user.uid
       });
+      const updatedReplies = [
+        ...currentTicket.replies,
+        { reply, role: isAdmin ? 'Admin' : 'User', timestamp: new Date().toISOString() }
+      ];
+      setCurrentTicket({ ...currentTicket, replies: updatedReplies });
+      setTickets(tickets.map(ticket => ticket.id === currentTicket.id ? { ...ticket, replies: updatedReplies } : ticket));
       setReply('');
       setShowModal(false);
-      fetchTickets();
     } catch (error) {
       setError('Error sending reply: ' + error.message);
     }

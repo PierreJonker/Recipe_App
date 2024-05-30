@@ -17,29 +17,32 @@ import ForgotPassword from './components/ForgotPassword';
 import Footer from './components/Footer';
 import { Container } from 'react-bootstrap';
 import './App.css';
+import { AuthProvider } from './AuthContext'; // Add this import
 
 function App() {
   return (
     <Router>
-      <Header />
-      <Container className="flex-grow-1">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/support" element={<Support />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/recipes" element={<PrivateRoute><RecipeList type="public" /></PrivateRoute>} />
-          <Route path="/recipes/:id" element={<PrivateRoute><RecipeDetail /></PrivateRoute>} />
-          <Route path="/add-recipe" element={<PrivateRoute><RecipeForm /></PrivateRoute>} />
-          <Route path="/edit-recipe/:id" element={<PrivateRoute><RecipeForm /></PrivateRoute>} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
-          <Route path="/private-recipes" element={<PrivateRoute><PrivateRecipes /></PrivateRoute>} />
-          <Route path="/draft-recipes" element={<PrivateRoute><DraftRecipes /></PrivateRoute>} />
-          <Route path="/admin" element={<PrivateRoute requiresAdmin={true}><Admin /></PrivateRoute>} />
-        </Routes>
-      </Container>
-      <Footer />
+      <AuthProvider>
+        <Header />
+        <Container className="flex-grow-1">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/support" element={<Support />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/recipes" element={<PrivateRoute><RecipeList type="public" /></PrivateRoute>} />
+            <Route path="/recipes/:id" element={<PrivateRoute><RecipeDetail /></PrivateRoute>} />
+            <Route path="/add-recipe" element={<PrivateRoute><RecipeForm /></PrivateRoute>} />
+            <Route path="/edit-recipe/:id" element={<PrivateRoute><RecipeForm /></PrivateRoute>} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
+            <Route path="/private-recipes" element={<PrivateRoute><PrivateRecipes /></PrivateRoute>} />
+            <Route path="/draft-recipes" element={<PrivateRoute><DraftRecipes /></PrivateRoute>} />
+            <Route path="/admin" element={<PrivateRoute requiresAdmin={true}><Admin /></PrivateRoute>} />
+          </Routes>
+        </Container>
+        <Footer />
+      </AuthProvider>
     </Router>
   );
 }

@@ -128,7 +128,7 @@ app.get('/supportTicket/:id', async (req, res) => {
 // respondSupportTicket endpoint
 app.post('/supportTicket/:id/respond', async (req, res) => {
   const { id } = req.params;
-  const { reply, isAdmin } = req.body;
+  const { reply, isAdmin, uid } = req.body;
   const firestore = admin.firestore();
 
   if (!reply) {
@@ -137,11 +137,10 @@ app.post('/supportTicket/:id/respond', async (req, res) => {
 
   try {
     const ticketRef = firestore.collection('supportTickets').doc(id);
-    const user = isAdmin ? await admin.auth().getUser(req.body.uid) : null;
     await ticketRef.update({
       replies: admin.firestore.FieldValue.arrayUnion({
         reply,
-        role: isAdmin ? `Admin (${user.displayName})` : 'User',
+        role: isAdmin ? 'Admin' : 'User',
         timestamp: new Date().toISOString()
       })
     });

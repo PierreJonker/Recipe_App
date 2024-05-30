@@ -7,6 +7,7 @@ import { Container, Button } from 'react-bootstrap';
 
 const DraftRecipes = () => {
   const [recipes, setRecipes] = useState([]);
+  const [error, setError] = useState(null);
   const firestore = getFirestore();
   const auth = getAuth();
   const user = auth.currentUser;
@@ -14,10 +15,14 @@ const DraftRecipes = () => {
   useEffect(() => {
     const fetchDraftRecipes = async () => {
       if (user) {
-        const q = query(collection(firestore, 'recipes'), where('createdBy', '==', user.uid), where('status', '==', 'draft'));
-        const querySnapshot = await getDocs(q);
-        const fetchedRecipes = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setRecipes(fetchedRecipes);
+        try {
+          const q = query(collection(firestore, 'recipes'), where('createdBy', '==', user.uid), where('status', '==', 'draft'));
+          const querySnapshot = await getDocs(q);
+          const fetchedRecipes = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          setRecipes(fetchedRecipes);
+        } catch (error) {
+          setError('Failed to fetch draft recipes');
+        }
       }
     };
 
@@ -25,13 +30,18 @@ const DraftRecipes = () => {
   }, [user, firestore]);
 
   const handleDelete = async (id) => {
-    await deleteDoc(doc(firestore, 'recipes', id));
-    setRecipes(recipes.filter(recipe => recipe.id !== id));
+    try {
+      await deleteDoc(doc(firestore, 'recipes', id));
+      setRecipes(recipes.filter(recipe => recipe.id !== id));
+    } catch (error) {
+      setError('Failed to delete recipe');
+    }
   };
 
   return (
     <Container>
       <h2>Your Draft Recipes</h2>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
       {recipes.length === 0 ? (
         <p>No draft recipes found.</p>
       ) : (

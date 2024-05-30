@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Button, Table, Alert, Modal } from 'react-bootstrap';
 import axios from 'axios';
+import { getAuth } from 'firebase/auth';
 
 const Support = () => {
   const [email, setEmail] = useState('');
@@ -13,6 +14,8 @@ const Support = () => {
   const [reply, setReply] = useState('');
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
+
+  const auth = getAuth();
 
   const handleCreateTicket = async (e) => {
     e.preventDefault();
@@ -62,11 +65,19 @@ const Support = () => {
   };
 
   const handleReply = async () => {
+    const user = auth.currentUser;
+    if (!user) {
+      setError('User not logged in');
+      return;
+    }
+
     try {
-      const isAdmin = false; // Change this condition based on your logic to determine if the reply is from an admin
-      await axios.post(`https://us-central1-recipesharingapp-1be92.cloudfunctions.net/api/supportTicket/${currentTicket.uniqueIdentifier}/respond`, { reply, isAdmin });
+      const isAdmin = user.email === 'admin@example.com'; // Adjust this condition based on your logic
+      await axios.post(`https://us-central1-recipesharingapp-1be92.cloudfunctions.net/api/supportTicket/${currentTicket.uniqueIdentifier}/respond`, { reply, isAdmin, uid: user.uid });
       const updatedTickets = tickets.map(ticket =>
-        ticket.uniqueIdentifier === currentTicket.uniqueIdentifier ? { ...ticket, replies: [...(ticket.replies || []), { reply, role: 'User', timestamp: new Date().toISOString() }] } : ticket
+        ticket.uniqueIdentifier === currentTicket.uniqueIdentifier
+          ? { ...ticket, replies: [...(ticket.replies || []), { reply, role: isAdmin ? 'Admin' : 'User', timestamp: new Date().toISOString() }] }
+          : ticket
       );
       setTickets(updatedTickets);
       setReply('');
